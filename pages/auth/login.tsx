@@ -2,6 +2,7 @@ import React from "react"
 import Head from "next/head"
 import Link from "next/link"
 import { getCsrfToken } from "next-auth/client"
+import { getSession } from "next-auth/client"
 
 export default function Login({ csrfToken }) {
   return (
@@ -80,8 +81,14 @@ export default function Login({ csrfToken }) {
   )
 }
 
-Login.getInitialProps = async ({ req }) => {
+export async function getServerSideProps(context) {
+  const session = await getSession(context)
+
+  if (session) {
+    return { redirect: { permanent: false, destination: "/" } }
+  }
+
   return {
-    csrfToken: await getCsrfToken({ req }),
+    props: { csrfToken: await getCsrfToken({ req: context.req }) },
   }
 }
