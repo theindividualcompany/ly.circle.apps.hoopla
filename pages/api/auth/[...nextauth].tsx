@@ -28,6 +28,12 @@ export default NextAuth({
           where: {
             email: credentials.email,
           },
+          select: {
+            id: true,
+            email: true,
+            password: true,
+            name: true,
+          },
         })
 
         if (!user) {
