@@ -2,13 +2,42 @@ import React from "react"
 import Head from "@components/_head"
 import Text from "@components/Text"
 import Landing from "@components/Landing"
-import classnames from "classnames"
 import "react-phone-number-input/style.css"
 import PhoneInput from "react-phone-number-input"
-import { PlusIcon, CheckCircleIcon, ChevronRightIcon, XCircleIcon } from "@heroicons/react/outline"
+import { PlusIcon } from "@heroicons/react/outline"
 import { getSession } from "next-auth/client"
 import { _getAccount } from "./api/account/_operations"
 import TimezoneSelect from "react-timezone-select"
+import Pressable from "@components/Pressable"
+import CalendarListItem from "../components/CalendarListItem"
+import { Calendar } from "../components/CalendarListItem/CalendarListItem"
+
+const calendars: Calendar[] = [
+  {
+    type: "google_calendar",
+    title: "Google Calendar",
+    description: "For personal and business calendars",
+    imageSrc: "/assets/integrations/google-calendar.svg",
+  },
+  {
+    type: "office365_calendar",
+    title: "Office 365 / Outlook.com Calendar",
+    description: "For personal and business calendars",
+    imageSrc: "/assets/integrations/outlook.svg",
+  },
+  {
+    type: "apple_calendar",
+    title: "Apple Calendar",
+    description: "For personal and business calendars",
+    imageSrc: "/assets/integrations/apple.png",
+  },
+  {
+    type: "zoom_video",
+    title: "Zoom",
+    description: "For meetings and conferences",
+    imageSrc: "/assets/integrations/zoom.svg",
+  },
+]
 
 export default function Page({ user }) {
   if (!user) {
@@ -127,67 +156,6 @@ export default function Page({ user }) {
   }
 
   const Main = () => {
-    const items = [
-      {
-        type: "google_calendar",
-        title: "Google Calendar",
-        description: "For personal and business calendars",
-        href: "#",
-        imageSrc: "/assets/integrations/google-calendar.svg",
-      },
-      {
-        type: "office365_calendar",
-        title: "Office 365 / Outlook.com Calendar",
-        description: "For personal and business calendars",
-        href: "#",
-        imageSrc: "/assets/integrations/outlook.svg",
-      },
-      {
-        type: "apple_calendar",
-        title: "Apple Calendar",
-        description: "For personal and business calendars",
-        href: "#",
-        imageSrc: "/assets/integrations/apple.png",
-      },
-      {
-        type: "zoom",
-        title: "Zoom",
-        description: "For meetings and conferences",
-        href: "#",
-        imageSrc: "/assets/integrations/zoom.svg",
-      },
-    ]
-
-    const CalendarListItem = ({ item }) => {
-      return (
-        <div className="relative group py-4 flex items-start space-x-3">
-          <div className="flex-shrink-0">
-            <span
-              className={classnames(
-                "inline-flex items-center justify-center h-10 w-10 rounded-lg"
-              )}>
-              <img className="h-full w-full mr-2" src={item.imageSrc} alt={item.title} />
-            </span>
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-sm font-medium text-gray-900">
-              <a href={item.href}>
-                <span className="absolute inset-0" aria-hidden="true" />
-                {item.title}
-              </a>
-            </div>
-            <p className="text-sm text-gray-500">{item.description}</p>
-          </div>
-          <div className="flex-shrink-0 self-center">
-            <ChevronRightIcon
-              className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-              aria-hidden="true"
-            />
-          </div>
-        </div>
-      )
-    }
-
     return (
       <main className="px-6 lg:px-8">
         <section className="flex flex-col space-y-12">
@@ -225,18 +193,16 @@ export default function Page({ user }) {
 
           <section className="">
             <Text variant="headline">Calendars</Text>
-
             <div>
-              <Text variant="title">Connect your first calendar</Text>
               <Text className="mt-1 " variant="subtitle">
                 Get started by connecting a calendar.
               </Text>
               <ul
                 role="list"
                 className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
-                {items.map((item, itemIdx) => (
+                {calendars.map((calendar, itemIdx) => (
                   <li key={itemIdx}>
-                    <CalendarListItem item={item} />
+                    <CalendarListItem calendar={calendar} />
                   </li>
                 ))}
               </ul>
@@ -245,7 +211,6 @@ export default function Page({ user }) {
           <section className="">
             <Text variant="headline">Calendars</Text>
             <div>
-              <Text variant="title">Your calendars</Text>
               <Text className="mt-1 " variant="subtitle">
                 These are the calendars Hoopla will use to check...
               </Text>
@@ -253,9 +218,9 @@ export default function Page({ user }) {
                 <ul
                   role="list"
                   className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
-                  {items.map((item, itemIdx) => (
+                  {calendars.map((calendar, itemIdx) => (
                     <li key={itemIdx}>
-                      <CalendarListItem item={item} />
+                      <CalendarListItem calendar={calendar} />
                     </li>
                   ))}
                 </ul>
