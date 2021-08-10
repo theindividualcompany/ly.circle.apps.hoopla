@@ -8,12 +8,14 @@ import PhoneInput from "react-phone-number-input"
 import { PlusIcon, CheckCircleIcon, ChevronRightIcon, XCircleIcon } from "@heroicons/react/outline"
 import { getSession } from "next-auth/client"
 import { _getAccount } from "./api/account/_operations"
-import Link from "next/link"
+import TimezoneSelect from "react-timezone-select"
 
 export default function Page({ user }) {
   if (!user) {
     return <Landing />
   }
+
+  const [timeZone, setTimeZone] = React.useState({ value: null, label: null })
 
   const Header = ({}) => {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = React.useState(false)
@@ -203,6 +205,20 @@ export default function Page({ user }) {
                 onChange={() => {
                   /* DO NOT REMOVE: Callback required by PhoneInput, comment added to satisfy eslint:no-empty-function */
                 }}
+              />
+            </div>
+          </section>
+
+          <section className="">
+            <label htmlFor="timezone">
+              <Text variant="headline">Time Zone</Text>
+            </label>
+            <div className="mt-3">
+              <TimezoneSelect
+                id="timeZone"
+                value={timeZone}
+                onChange={(tz) => setTimeZone(tz.value)}
+                className="shadow-sm focus:ring-black focus:border-black mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
               />
             </div>
           </section>
