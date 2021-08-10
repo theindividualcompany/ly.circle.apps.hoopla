@@ -21,21 +21,7 @@ body {
   @apply text-secondary dark:text-white;
 }
 
-body {
-  height: 100vh;
-  -webkit-touch-callout: none !important;
-}
 
-@supports (-webkit-touch-callout: none) {
-  body {
-    height: -webkit-fill-available;
-    -webkit-tap-highlight-color: transparent;
-  }
-}
-
-*:not(input, textarea, [contenteditable="true"]) {
-  -webkit-user-select: none !important;
-}
 
 .button {
   @apply inline-flex rounded px-2.5 py-1.5 text-xs rounded-xl items-center border border-transparent font-medium shadow-sm text-white bg-primary focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-secondary-800;
