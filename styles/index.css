@@ -17,11 +17,9 @@ html {
 
 html,
 body {
-  @apply h-screen bg-neutral-50 dark:bg-black;
+  @apply bg-neutral-50 dark:bg-black;
   @apply text-secondary dark:text-white;
 }
-
-
 
 .button {
   @apply inline-flex rounded px-2.5 py-1.5 text-xs rounded-xl items-center border border-transparent font-medium shadow-sm text-white bg-primary focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-secondary-800;
@@ -90,7 +88,6 @@ body {
   width: 18px !important;
 }
 
-
 .sticky-note {
   position: absolute;
   right: 0;
@@ -104,9 +101,10 @@ body {
   font-size: 14px;
   color: #000;
   background: rgba(255, 255, 51, 0.8);
-  box-shadow: -2px 2px 2px rgba(0,0,0,0.3);
+  box-shadow: -2px 2px 2px rgba(0, 0, 0, 0.3);
 }
-.sticky-note:before, .sticky-note:after {
+.sticky-note:before,
+.sticky-note:after {
   content: "";
   display: block;
   position: absolute;

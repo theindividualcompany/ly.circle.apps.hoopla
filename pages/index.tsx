@@ -320,7 +320,7 @@ export default function Page({ user }) {
   return (
     <>
       <Head />
-      <div className="max-w-xl mx-auto">
+      <div className="max-w-xl mx-auto mb-20">
         <Header />
         <Main />
       </div>
