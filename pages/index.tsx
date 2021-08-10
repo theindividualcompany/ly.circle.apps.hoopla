@@ -149,24 +149,35 @@ export default function Page({ user }) {
       },
     ]
 
-    const integrations = [
-      {
-        installed: true,
-        connected: true,
-        type: "google_calendar",
-        title: "Google Calendar",
-        imageSrc: "/assets/integrations/google-calendar.svg",
-        description: "For personal and business calendars",
-      },
-      {
-        installed: true,
-        connected: true,
-        type: "office365_calendar",
-        title: "Office 365 / Outlook.com Calendar",
-        imageSrc: "/assets/integrations/outlook.svg",
-        description: "For personal and business calendars",
-      },
-    ]
+    const CalendarListItem = ({ item }) => {
+      return (
+        <div className="relative group py-4 flex items-start space-x-3">
+          <div className="flex-shrink-0">
+            <span
+              className={classnames(
+                "inline-flex items-center justify-center h-10 w-10 rounded-lg"
+              )}>
+              <img className="h-full w-full mr-2" src={item.imageSrc} alt={item.title} />
+            </span>
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="text-sm font-medium text-gray-900">
+              <a href={item.href}>
+                <span className="absolute inset-0" aria-hidden="true" />
+                {item.title}
+              </a>
+            </div>
+            <p className="text-sm text-gray-500">{item.description}</p>
+          </div>
+          <div className="flex-shrink-0 self-center">
+            <ChevronRightIcon
+              className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      )
+    }
 
     return (
       <main className="px-6 lg:px-8">
@@ -201,35 +212,7 @@ export default function Page({ user }) {
                 className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
                 {items.map((item, itemIdx) => (
                   <li key={itemIdx}>
-                    <div className="relative group py-4 flex items-start space-x-3">
-                      <div className="flex-shrink-0">
-                        <span
-                          className={classnames(
-                            "inline-flex items-center justify-center h-10 w-10 rounded-lg"
-                          )}>
-                          <img
-                            className="h-full w-full mr-2"
-                            src={item.imageSrc}
-                            alt={item.title}
-                          />
-                        </span>
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="text-sm font-medium text-gray-900">
-                          <a href={item.href}>
-                            <span className="absolute inset-0" aria-hidden="true" />
-                            {item.title}
-                          </a>
-                        </div>
-                        <p className="text-sm text-gray-500">{item.description}</p>
-                      </div>
-                      <div className="flex-shrink-0 self-center">
-                        <ChevronRightIcon
-                          className="h-5 w-5 text-gray-400 group-hover:text-gray-500"
-                          aria-hidden="true"
-                        />
-                      </div>
-                    </div>
+                    <CalendarListItem item={item} />
                   </li>
                 ))}
               </ul>
@@ -243,55 +226,15 @@ export default function Page({ user }) {
               <div className="mt-6">
                 <button className="py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
                   <PlusIcon className="w-5 h-5 mr-1 inline" />
-                  Connect a new App
+                  Connect a calendar
                 </button>
 
-                <ul className="divide-y divide-gray-200">
-                  {integrations.map((ig) => (
-                    <li key={ig.title}>
-                      <Link href={"#"}>
-                        <a className="block hover:bg-gray-50">
-                          <div className="flex items-center py-4">
-                            <div className="min-w-0 flex-1 flex justify-between items-center">
-                              <div className="flex-shrink-0">
-                                <img className="h-10 w-10 mr-2" src={ig.imageSrc} alt={ig.title} />
-                              </div>
-                              <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
-                                <div>
-                                  <p className="text-sm font-medium text-neutral-900 truncate">
-                                    {ig.title}
-                                  </p>
-                                  <p className="flex items-center text-sm text-gray-500">
-                                    {ig.type.endsWith("_calendar") && (
-                                      <span className="truncate">Calendar Integration</span>
-                                    )}
-                                    {ig.type.endsWith("_video") && (
-                                      <span className="truncate">Video Conferencing</span>
-                                    )}
-                                  </p>
-                                </div>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <div className="">
-                                  {ig.connected && (
-                                    <p className="mt-2 flex items-center text text-gray-500">
-                                      <CheckCircleIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-400" />
-                                      <span className="hidden md:block">Connected</span>
-                                    </p>
-                                  )}
-                                  {!ig.connected && (
-                                    <p className="mt-3 flex items-center text text-gray-500">
-                                      <XCircleIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-400" />
-                                      <span className="hidden md:block">Not connected</span>
-                                    </p>
-                                  )}
-                                </div>
-                                <ChevronRightIcon className="h-5 w-5 text-gray-400" />
-                              </div>
-                            </div>
-                          </div>
-                        </a>
-                      </Link>
+                <ul
+                  role="list"
+                  className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
+                  {items.map((item, itemIdx) => (
+                    <li key={itemIdx}>
+                      <CalendarListItem item={item} />
                     </li>
                   ))}
                 </ul>
