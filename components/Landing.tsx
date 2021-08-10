@@ -4,6 +4,7 @@ import Text from "@components/Text"
 import NextImage from "next/image"
 import dayjs from "dayjs"
 import useTypeform from "../lib/TypeForm/useTypeform"
+import Link from "next/link"
 
 export const Landing = () => {
   useTypeform()
@@ -71,59 +72,14 @@ export const Landing = () => {
               </div>
             </div>
 
-            {/* <div className="relative z-10 ml-4 flex items-center space-x-4">
-                <div className="flex-shrink-0 relative ml-4">
-                  <button
-                    onClick={toggleMenu}
-                    type="button"
-                    className="button button__secondary button__xs button__round">
-                    <div
-                      className="rounded-md p-2 inline-flex items-center justify-center text-secondary focus:outline-none"
-                      aria-controls="mobile-menu"
-                      aria-expanded="false">
-                      <span className="sr-only">Open menu</span>
-  
-                      <svg
-                        className="block h-6 w-6"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true">
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth="2"
-                          d="M4 6h16M4 12h16M4 18h16"
-                        />
-                      </svg>
-                    </div>
-                    <div
-                      className="bg-gray-800 rounded-full flex text-sm text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white"
-                      id="user-menu-button"
-                      aria-expanded="false"
-                      aria-haspopup="true">
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        className="h-8 w-8"
-                        id="user-avatar"
-                        src="https://ik.imagekit.io/83dpwdi5fkr/Frame_2x_ZtQJERqU08.png"
-                      />
-                    </div>
-                  </button>
-                  <ProfileMenu isOpen={isProfileMenuOpen} />
-                </div>
-              </div>
-        */}
+            <div className="relative z-10 ml-4 flex items-center space-x-4">
+              <Link href="/auth/login">
+                <a>
+                  <Text variant="caption">Login</Text>
+                </a>
+              </Link>
+            </div>
           </header>
-        </div>
-        <div className="flex flex-col justify-center items-center relative space-y-4 w-full h-full">
-          {/* <div className="sticky-note">
-              <p>
-                Meeting <b>TODAY</b>
-              </p>
-              <p> at {dayjs().format("h:mm a")}</p>
-            </div> */}
         </div>
       </section>
     )
