@@ -147,6 +147,13 @@ export default function Page({ user }) {
         href: "#",
         imageSrc: "/assets/integrations/apple.png",
       },
+      {
+        type: "zoom",
+        title: "Zoom",
+        description: "For meetings and conferences",
+        href: "#",
+        imageSrc: "/assets/integrations/zoom.svg",
+      },
     ]
 
     const CalendarListItem = ({ item }) => {
@@ -199,6 +206,7 @@ export default function Page({ user }) {
               />
             </div>
           </section>
+
           <section className="">
             <Text variant="headline">Calendars</Text>
 
@@ -217,18 +225,15 @@ export default function Page({ user }) {
                 ))}
               </ul>
             </div>
-
+          </section>
+          <section className="">
+            <Text variant="headline">Calendars</Text>
             <div>
               <Text variant="title">Your calendars</Text>
               <Text className="mt-1 " variant="subtitle">
                 These are the calendars Hoopla will use to check...
               </Text>
               <div className="mt-6">
-                <button className="py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
-                  <PlusIcon className="w-5 h-5 mr-1 inline" />
-                  Connect a calendar
-                </button>
-
                 <ul
                   role="list"
                   className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
@@ -238,6 +243,11 @@ export default function Page({ user }) {
                     </li>
                   ))}
                 </ul>
+
+                <button className="w-full py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
+                  <PlusIcon className="w-5 h-5 mr-1 inline" />
+                  Connect a calendar
+                </button>
               </div>
             </div>
           </section>
