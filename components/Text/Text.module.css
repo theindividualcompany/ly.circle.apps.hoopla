@@ -1,0 +1,50 @@
+.text {
+}
+
+.text--body {
+  @apply text-lg leading-relaxed;
+}
+
+.text--overline {
+  @apply text-sm uppercase font-semibold leading-snug tracking-wide;
+}
+
+.text--caption {
+  @apply text-sm font-light leading-tight;
+}
+
+.text--caption2 {
+  @apply text-xs italic leading-tight;
+}
+
+.text--footnote {
+  @apply text-base font-normal;
+}
+
+.text--headline {
+  @apply text-2xl leading-8 font-black tracking-tight sm:text-3xl;
+}
+
+.text--subheadline {
+  @apply text-xl leading-relaxed;
+}
+
+.text--largetitle {
+  @apply text-2xl font-normal;
+}
+
+.text--subtitle {
+  @apply text-base font-normal;
+}
+
+.text--title {
+  @apply text-base font-medium;
+}
+
+.text--title2 {
+  @apply text-sm font-medium;
+}
+
+.text--title3 {
+  @apply text-sm font-light leading-snug;
+}

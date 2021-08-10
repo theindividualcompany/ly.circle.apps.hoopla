@@ -1,0 +1,152 @@
+/* purgecss start ignore */
+@tailwind base;
+@tailwind components;
+/* purgecss end ignore */
+
+@tailwind utilities;
+
+@import url("https://rsms.me/inter/inter.css");
+html {
+  font-family: "Inter", sans-serif;
+}
+@supports (font-variation-settings: normal) {
+  html {
+    font-family: "Inter var", sans-serif;
+  }
+}
+
+html,
+body {
+  @apply h-screen bg-white dark:bg-black;
+  @apply text-secondary dark:text-white;
+}
+
+body {
+  height: 100vh;
+  -webkit-touch-callout: none !important;
+}
+
+@supports (-webkit-touch-callout: none) {
+  body {
+    height: -webkit-fill-available;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+*:not(input, textarea, [contenteditable="true"]) {
+  -webkit-user-select: none !important;
+}
+
+.button {
+  @apply inline-flex rounded px-2.5 py-1.5 text-xs rounded-xl items-center border border-transparent font-medium shadow-sm text-white bg-primary focus:outline-none focus:ring-1 focus:ring-offset-0 focus:ring-secondary-800;
+}
+
+.button__round {
+  @apply rounded-full !important;
+}
+
+.button__secondary {
+  @apply bg-white text-secondary;
+}
+
+.button__third {
+  @apply bg-secondary text-white;
+}
+
+.button__sm {
+  @apply px-2.5 py-1.5 text-xs;
+}
+
+.button__md {
+  @apply px-3 py-2 text-sm;
+}
+
+.button__lg {
+  @apply px-4 py-2 text-sm;
+}
+
+.button__xl {
+  @apply px-6 py-3 text-base;
+}
+
+.header {
+  @apply max-w-5xl px-4 mx-auto relative min-h-16 flex justify-between;
+}
+
+@screen sm {
+  .header {
+    @apply px-8;
+  }
+}
+
+.nav--link {
+  @apply p-2;
+  @apply relative;
+}
+
+.nav--link.nav--link__selected::before {
+  background-color: white;
+  border-radius: 1px !important;
+  bottom: 0px !important;
+  content: "" !important;
+  height: 2px !important;
+  left: 50% !important;
+  margin-left: -9px !important;
+  position: absolute !important;
+  -webkit-transform: scaleX(1) !important;
+  -ms-transform: scaleX(1) !important;
+  transform: scaleX(1) !important;
+  -webkit-transition: 0.2s -webkit-transform cubic-bezier(0, 0, 0.1, 1),
+    0.2s transform cubic-bezier(0, 0, 0.1, 1) !important;
+  -moz-transition: 0.2s transform cubic-bezier(0, 0, 0.1, 1) !important;
+  transition: 0.2s -ms-transform cubic-bezier(0, 0, 0.1, 1),
+    0.2s -webkit-transform cubic-bezier(0, 0, 0.1, 1), 0.2s transform cubic-bezier(0, 0, 0.1, 1) !important;
+  width: 18px !important;
+}
+
+
+.sticky-note {
+  position: absolute;
+  right: 0;
+  z-index: 150;
+  transform: rotate(5deg);
+  width: 200px;
+  min-height: 150px;
+  margin: -10px 10px 10px;
+  padding: 10px;
+  font-family: "Comic Sans MS", "Comic Sans", "Chalkboard SE", "Comic Neue", cursive;
+  font-size: 14px;
+  color: #000;
+  background: rgba(255, 255, 51, 0.8);
+  box-shadow: -2px 2px 2px rgba(0,0,0,0.3);
+}
+.sticky-note:before, .sticky-note:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  top: 0;
+  right: 0;
+}
+.sticky-note:before {
+  border-top: solid 8px #fff;
+  border-right: solid 8px #fff;
+  border-left: solid 8px transparent;
+  border-bottom: solid 8px transparent;
+}
+.sticky-note:after {
+  border-bottom: solid 8px #dddd33;
+  border-left: solid 8px #dddd33;
+  border-right: solid 8px transparent;
+  border-top: solid 8px transparent;
+}
+
+blockquote.letter {
+  background-color: unset;
+  @apply bg-white dark:bg-opacity-10;
+  @apply p-8;
+  @apply rounded-md;
+  @apply shadow-xl;
+  @apply leading-loose;
+}

@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Account {
+  id         String    @id @default(cuid())
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  handle     String    @unique
+  phone      String?   @unique
+  email      String?   @unique
+  name       String?
+  isVerified Boolean?  @default(false)
+  password   String?
+  firstLogin DateTime?
+  lastLogin  DateTime?
+  timezone   String?
+  circlelyId String?
+}
