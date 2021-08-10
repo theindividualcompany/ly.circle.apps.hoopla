@@ -5,6 +5,18 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        neutral: {
+          50: "#F7F8F9",
+          100: "#F4F5F6",
+          200: "#EAEEF2",
+          300: "#C6CCD5",
+          400: "#9BA6B6",
+          500: "#708097",
+          600: "#657388",
+          700: "#373F4A",
+          800: "#1F2937",
+          900: "#1A1A1A",
+        },
         black: "#1d1d1d",
         red: {
           DEFAULT: "#FF385C",

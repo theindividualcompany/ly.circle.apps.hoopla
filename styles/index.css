@@ -17,7 +17,7 @@ html {
 
 html,
 body {
-  @apply h-screen bg-white dark:bg-black;
+  @apply h-screen bg-neutral-50 dark:bg-black;
   @apply text-secondary dark:text-white;
 }
 

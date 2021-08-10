@@ -34,11 +34,12 @@
 }
 
 .text--subtitle {
-  @apply text-base font-normal;
+  @apply text-sm text-gray-500;
 }
 
 .text--title {
-  @apply text-base font-medium;
+  /* @apply text-base font-medium; */
+  @apply text-lg font-medium text-gray-900;
 }
 
 .text--title2 {
