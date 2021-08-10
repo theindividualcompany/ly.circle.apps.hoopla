@@ -130,9 +130,8 @@ export const Landing = () => {
                   If you have a Circlely Official Account Hoopla is free.
                 </Text>
               </section>
-
-              <Text className="flex align-center items-center space-x-2">
-                <span>- Femi</span>
+              <div className="flex align-center items-center space-x-2">
+                <Text>- Femi</Text>
                 <NextImage
                   className="rounded-full"
                   src="/assets/femyeda.png"
@@ -140,7 +139,7 @@ export const Landing = () => {
                   height={40}
                   layout="fixed"
                 />
-              </Text>
+              </div>
               <a
                 className="typeform-share button button__lg w-full button mt-8 mb-8 mx-auto flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 href="https://form.typeform.com/to/zTUUJnrk?typeform-medium=embed-snippet"
