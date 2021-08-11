@@ -4,6 +4,7 @@ import Text from "@components/Text"
 import { ChevronRightIcon } from "@heroicons/react/outline"
 
 export type Calendar = {
+  connectionId?: string
   type: string
   title: string
   description: string

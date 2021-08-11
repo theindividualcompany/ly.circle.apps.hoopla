@@ -11,6 +11,9 @@ import TimezoneSelect from "react-timezone-select"
 import Pressable from "@components/Pressable"
 import CalendarListItem from "../components/CalendarListItem"
 import { Calendar } from "../components/CalendarListItem/CalendarListItem"
+import { _getManyCalendarConnection } from "./api/calendarConnection/_operations"
+import { Account, CalendarConnection } from "@prisma/client"
+import isEmpty from "lodash/isEmpty"
 
 const calendars: Calendar[] = [
   {
@@ -39,7 +42,12 @@ const calendars: Calendar[] = [
   },
 ]
 
-export default function Page({ user }) {
+type PageProps = {
+  user: Account
+  calendarConnections: CalendarConnection[]
+}
+
+export default function Page({ user, calendarConnections }: PageProps) {
   if (!user) {
     return <Landing />
   }
@@ -204,46 +212,49 @@ export default function Page({ user }) {
 
           <section className="">
             <Text variant="headline">Calendars</Text>
-            <div>
-              <Text className="mt-1 " variant="subtitle">
-                Get started by connecting a calendar.
-              </Text>
-              <ul
-                role="list"
-                className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
-                {calendars.map((calendar, itemIdx) => (
-                  <li key={itemIdx}>
-                    <Pressable onPress={() => integrationHandler(calendar.type)}>
-                      <CalendarListItem calendar={calendar} />
-                    </Pressable>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </section>
-          <section className="">
-            <Text variant="headline">Calendars</Text>
-            <div>
-              <Text className="mt-1 " variant="subtitle">
-                These are the calendars Hoopla will use to check...
-              </Text>
-              <div className="mt-6">
+            {isEmpty(calendarConnections) ? (
+              <div>
+                <Text className="mt-1 " variant="subtitle">
+                  Get started by connecting a calendar.
+                </Text>
                 <ul
                   role="list"
                   className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
                   {calendars.map((calendar, itemIdx) => (
                     <li key={itemIdx}>
-                      <CalendarListItem calendar={calendar} />
+                      <Pressable onPress={() => integrationHandler(calendar.type)}>
+                        <CalendarListItem calendar={calendar} />
+                      </Pressable>
                     </li>
                   ))}
                 </ul>
-
-                <button className="w-full py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
-                  <PlusIcon className="w-5 h-5 mr-1 inline" />
-                  Connect a calendar
-                </button>
               </div>
-            </div>
+            ) : (
+              <div>
+                <Text className="mt-1 " variant="subtitle">
+                  These are the calendars Hoopla will use to check...
+                </Text>
+                <div className="mt-6">
+                  <ul
+                    role="list"
+                    className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
+                    {calendarConnections.map((calendar, itemIdx) => {
+                      const c = calendars.find((c) => c.type === calendar.provider)
+                      return (
+                        <li key={itemIdx}>
+                          <CalendarListItem calendar={{ connectionId: calendar.id, ...c }} />
+                        </li>
+                      )
+                    })}
+                  </ul>
+
+                  <button className="w-full py-2 px-4 border border-transparent rounded-sm shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-neutral-900">
+                    <PlusIcon className="w-5 h-5 mr-1 inline" />
+                    Connect a calendar
+                  </button>
+                </div>
+              </div>
+            )}
           </section>
         </section>
         <section className="mt-20">
@@ -292,7 +303,21 @@ export async function getServerSideProps(context) {
     },
   })
 
+  const calendarConnections = (
+    await _getManyCalendarConnection({
+      where: {
+        accountId: user.id,
+      },
+    })
+  ).map((connection) => {
+    return {
+      ...connection,
+      createdAt: connection.createdAt.toString(),
+      updatedAt: connection.updatedAt.toString(),
+    }
+  })
+
   return {
-    props: { user },
+    props: { user, calendarConnections },
   }
 }
