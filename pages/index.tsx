@@ -46,6 +46,17 @@ export default function Page({ user }) {
 
   const [timeZone, setTimeZone] = React.useState({ value: null, label: null })
 
+  function integrationHandler(type) {
+    if (type === "zoom_video" || type === "apple_calendar" || type === "office365_calendar") {
+      console.log("unimplemented")
+      return
+    }
+
+    fetch("/api/integrations/" + type.replace("_", "") + "/add")
+      .then((response) => response.json())
+      .then((data) => (window.location.href = data.url))
+  }
+
   const Header = ({}) => {
     const [isProfileMenuOpen, setIsProfileMenuOpen] = React.useState(false)
     const toggleMenu = () => {
@@ -202,7 +213,9 @@ export default function Page({ user }) {
                 className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
                 {calendars.map((calendar, itemIdx) => (
                   <li key={itemIdx}>
-                    <CalendarListItem calendar={calendar} />
+                    <Pressable onPress={() => integrationHandler(calendar.type)}>
+                      <CalendarListItem calendar={calendar} />
+                    </Pressable>
                   </li>
                 ))}
               </ul>
