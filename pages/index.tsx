@@ -47,7 +47,7 @@ export default function Page({ user }) {
   const [timeZone, setTimeZone] = React.useState({ value: null, label: null })
 
   function integrationHandler(type) {
-    if (type === "zoom_video" || type === "apple_calendar" || type === "office365_calendar") {
+    if (type === "apple_calendar") {
       console.log("unimplemented")
       return
     }
