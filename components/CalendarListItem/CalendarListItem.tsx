@@ -33,7 +33,7 @@ const CalendarListItem: React.FunctionComponent<CalendarListItemProps> = ({
             {calendar.title}
           </Text>
         </div>
-        <Text className="text-sm text-gray-500">{calendar.description}</Text>
+        <Text variant="caption">{calendar.description}</Text>
       </div>
       <div className="flex-shrink-0 self-center">
         <ChevronRightIcon

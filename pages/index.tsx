@@ -3,7 +3,7 @@ import Head from "@components/_head"
 import Text from "@components/Text"
 import Landing from "@components/Landing"
 import "react-phone-number-input/style.css"
-import PhoneInput from "react-phone-number-input"
+import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
 import { PlusIcon } from "@heroicons/react/outline"
 import { getSession } from "next-auth/client"
 import { _getAccount } from "./api/account/_operations"
@@ -14,6 +14,13 @@ import { Calendar } from "../components/CalendarListItem/CalendarListItem"
 import { _getManyCalendarConnection } from "./api/calendarConnection/_operations"
 import { Account, CalendarConnection } from "@prisma/client"
 import isEmpty from "lodash/isEmpty"
+import dayjs from "dayjs"
+import utc from "dayjs/plugin/utc"
+import timezone from "dayjs/plugin/timezone"
+import Router from "next/router"
+
+dayjs.extend(utc)
+dayjs.extend(timezone)
 
 const calendars: Calendar[] = [
   {
@@ -52,10 +59,18 @@ export default function Page({ user, calendarConnections }: PageProps) {
     return <Landing />
   }
 
-  const [timeZone, setTimeZone] = React.useState({ value: null, label: null })
-
   function integrationHandler(type) {
     if (type === "apple_calendar") {
+      console.log("unimplemented")
+      return
+    }
+
+    if (type === "office365_calendar") {
+      console.log("unimplemented")
+      return
+    }
+
+    if (type === "zoom_video") {
       console.log("unimplemented")
       return
     }
@@ -175,23 +190,143 @@ export default function Page({ user, calendarConnections }: PageProps) {
   }
 
   const Main = () => {
+    const [shouldUpdate, setShouldUpdate] = React.useState(false)
+    const [accountValid, setAccountValid] = React.useState(() => {
+      if (user.timezone && user.phone && isValidPhoneNumber(user.phone)) {
+        return true
+      }
+
+      return false
+    })
+
+    const [timeZone, setTimeZone] = React.useState(() => {
+      if (user.timezone) {
+        return { value: user.timezone, label: null }
+      }
+      return { value: null, label: null }
+    })
+
+    const [phoneNumber, setPhoneNumber] = React.useState(() => {
+      if (user.phone) {
+        return user.phone
+      }
+
+      return null
+    })
+
+    React.useEffect(() => {
+      if (!user.timezone) {
+        const guessedTimeZone = dayjs.tz.guess()
+
+        ;(async () => {
+          setTimeZone({
+            value: guessedTimeZone,
+            label: "",
+          })
+
+          await updateUser({
+            timezone: guessedTimeZone,
+          })
+        })()
+      }
+    }, [user])
+
+    React.useEffect(() => {
+      if (user.phone === phoneNumber && user.timezone === timeZone.value) {
+        setShouldUpdate(false)
+        return
+      }
+
+      if (phoneNumber && !isValidPhoneNumber(phoneNumber)) {
+        setShouldUpdate(false)
+      }
+
+      if (phoneNumber && phoneNumber !== user?.phone && isValidPhoneNumber(phoneNumber)) {
+        setShouldUpdate(true)
+      }
+
+      if (timeZone?.value && timeZone.value !== user?.timezone) {
+        setShouldUpdate(true)
+      }
+    }, [timeZone, phoneNumber])
+
+    const updateUser = async (data) => {
+      const body = JSON.stringify({
+        data: {
+          where: {
+            id: user.id,
+          },
+          data: {
+            ...data,
+          },
+        },
+      })
+
+      return await fetch("/api/account/update", {
+        method: "POST",
+        body: body,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+    }
+
+    const saveChanges = async () => {
+      const res = await updateUser({
+        timezone: timeZone.value,
+        phone: phoneNumber,
+      })
+
+      if (res.ok) {
+        Router.reload()
+      }
+    }
+
+    const onChangeTimeZone = (tz) => {
+      setTimeZone(tz)
+    }
+
+    const onChangePhoneNumber = (number) => {
+      setPhoneNumber(number ? number : null)
+    }
+
+    const AccountStatus = React.useMemo(() => {
+      return (
+        <div className="px-4 py-4 flex justify-between">
+          <Text>
+            {accountValid ? "Your account is all configured." : "Hey, fill out those values."}
+          </Text>
+          {shouldUpdate && (
+            <>
+              <button onClick={saveChanges} className="button button__secondary">
+                Save Changes
+              </button>
+            </>
+          )}
+        </div>
+      )
+    }, [shouldUpdate, accountValid])
+
     return (
       <main className="px-6 lg:px-8">
         <section className="flex flex-col space-y-12">
           <section className="">
             <label htmlFor="phone">
               <Text variant="headline">Send Reminders To</Text>
+              <Text className="mt-1 " variant="subtitle">
+                Only works with major cell providers...
+              </Text>
             </label>
             <div className="mt-3">
               <PhoneInput
                 name="phone"
+                defaultCountry="US"
                 placeholder="Enter phone number"
                 id="phone"
                 required
                 className="shadow-sm dark:bg-black dark:text-white dark:border-gray-900 focus:ring-black focus:border-black block w-full sm:text-sm border-gray-300 rounded-md"
-                onChange={() => {
-                  /* DO NOT REMOVE: Callback required by PhoneInput, comment added to satisfy eslint:no-empty-function */
-                }}
+                value={phoneNumber}
+                onChange={onChangePhoneNumber}
               />
             </div>
           </section>
@@ -199,17 +334,21 @@ export default function Page({ user, calendarConnections }: PageProps) {
           <section className="">
             <label htmlFor="timezone">
               <Text variant="headline">Time Zone</Text>
+              <Text className="mt-1 " variant="subtitle">
+                If this is not your timezone...
+              </Text>
             </label>
             <div className="mt-3">
               <TimezoneSelect
+                instanceId="select-timezone"
                 id="timeZone"
                 value={timeZone}
-                onChange={(tz) => setTimeZone(tz.value)}
+                onChange={onChangeTimeZone}
                 className="shadow-sm focus:ring-black focus:border-black mt-1 block w-full sm:text-sm border-gray-300 rounded-md"
               />
             </div>
           </section>
-
+          <section className="bg-neutral-900 min-h-8 w-full text-white">{AccountStatus}</section>
           <section className="">
             <Text variant="headline">Calendars</Text>
             {isEmpty(calendarConnections) ? (
@@ -300,6 +439,8 @@ export async function getServerSideProps(context) {
     select: {
       id: true,
       email: true,
+      timezone: true,
+      phone: true,
     },
   })
 
