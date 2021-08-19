@@ -35,3 +35,19 @@ model CalendarConnection {
   Account   Account  @relation(fields: [accountId], references: [id])
   accountId String
 }
+
+model Reminder {
+  id          String    @id @default(cuid())
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  to          String
+  sendAt      DateTime  @default(now())
+  start       DateTime?
+  timezone    String?
+  title       String?   @default("You're supposed to be doing something right now")
+  subtitle    String?
+  description String?
+  type        String?   @default("event")
+  data        Json?
+  sent        Boolean?  @default(false)
+}
