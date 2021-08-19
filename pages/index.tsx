@@ -5,7 +5,7 @@ import Landing from "@components/Landing"
 import "react-phone-number-input/style.css"
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input"
 import { PlusIcon } from "@heroicons/react/outline"
-import { getSession } from "next-auth/client"
+import { getSession, signOut } from "next-auth/client"
 import { _getAccount } from "./api/account/_operations"
 import TimezoneSelect from "react-timezone-select"
 import Pressable from "@components/Pressable"
@@ -116,7 +116,9 @@ export default function Page({ user, calendarConnections }: PageProps) {
           </a>
 
           <a
-            href="#"
+            onClick={() => {
+              signOut()
+            }}
             className="block py-2 px-4 text-sm text-gray-700"
             role="menuitem"
             tabIndex={-1}
