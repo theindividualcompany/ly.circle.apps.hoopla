@@ -74,8 +74,8 @@ export const Landing = () => {
 
             <div className="relative z-10 ml-4 flex items-center space-x-4">
               <Link href="/auth/login">
-                <a>
-                  <Text variant="caption">Login</Text>
+                <a className="button button__round button__lg">
+                  <Text>Login</Text>
                 </a>
               </Link>
             </div>
