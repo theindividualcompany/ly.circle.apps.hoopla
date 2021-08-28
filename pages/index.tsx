@@ -431,9 +431,10 @@ export async function getServerSideProps(context) {
   const session = await getSession(context)
 
   if (!session) {
-    return { redirect: { permanent: false, destination: "/auth/login" } }
+    return { props: { user: null } }
   }
 
+  let connections = []
   const user = await _getAccount({
     where: {
       email: session.user.email,
@@ -446,21 +447,23 @@ export async function getServerSideProps(context) {
     },
   })
 
-  const calendarConnections = (
-    await _getManyCalendarConnection({
-      where: {
-        accountId: user.id,
-      },
+  if (user) {
+    connections = (
+      await _getManyCalendarConnection({
+        where: {
+          accountId: user.id,
+        },
+      })
+    ).map((connection) => {
+      return {
+        ...connection,
+        createdAt: connection.createdAt.toString(),
+        updatedAt: connection.updatedAt.toString(),
+      }
     })
-  ).map((connection) => {
-    return {
-      ...connection,
-      createdAt: connection.createdAt.toString(),
-      updatedAt: connection.updatedAt.toString(),
-    }
-  })
+  }
 
   return {
-    props: { user, calendarConnections },
+    props: { user, calendarConnections: connections },
   }
 }
