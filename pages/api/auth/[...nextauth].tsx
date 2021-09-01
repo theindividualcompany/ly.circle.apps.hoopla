@@ -1,7 +1,8 @@
 import NextAuth from "next-auth"
 import Providers from "next-auth/providers"
 import { verifyPassword } from "../../../lib/auth/passwords"
-import { _getAccount } from "../account/_operations"
+import { _getAccount, _createAccount } from "../account/_operations"
+import { hashPassword } from "@lib/auth/passwords"
 
 export default NextAuth({
   session: {
@@ -24,7 +25,7 @@ export default NextAuth({
         },
       },
       async authorize(credentials) {
-        const user = await _getAccount({
+        let user = await _getAccount({
           where: {
             email: credentials.email,
           },
@@ -37,13 +38,28 @@ export default NextAuth({
         })
 
         if (!user) {
-          throw new Error("No user found")
-        }
+          const { email, password } = credentials
 
-        const isValid = await verifyPassword(credentials.password, user.password)
+          if (!email || !email.includes("@")) {
+            throw new Error("Invalid email")
+          }
 
-        if (!isValid) {
-          throw new Error("Incorrect password")
+          if (!password || password.trim().length < 12) {
+            throw new Error("Invalid input - password should be at least 12 characters long.")
+          }
+
+          user = await _createAccount({
+            data: {
+              email: credentials.email,
+              password: await hashPassword(credentials.password),
+            },
+          })
+        } else {
+          const isValid = await verifyPassword(credentials.password, user.password)
+
+          if (!isValid) {
+            throw new Error("Incorrect password")
+          }
         }
 
         return {

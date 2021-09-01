@@ -11,11 +11,12 @@ export default function Login({ csrfToken }) {
       </Head>
       <div className="sm:mx-auto sm:w-full sm:max-w-md text-center py-12">
         <img className="h-16 mx-auto" src="/assets/iconset/128@2x.png" alt="Hoopla Logo" />
+        <Text variant="caption">Hoopla is free during beta.</Text>
       </div>
       <div className="bg-neutral-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8 mt-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md text-center">
-          <Text variant="headline">Welcome back.</Text>
-          <Text variant="headline">Let's log in.</Text>
+          <Text variant="headline">Welcome to Hoopla!</Text>
+          <Text className="mt-6">Create your Hoopla account so you stop missing meetings.</Text>
         </div>
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
           <div className="py-8 px-4 mx-2 rounded-sm sm:px-10">
@@ -62,7 +63,7 @@ export default function Login({ csrfToken }) {
                 <button
                   type="submit"
                   className="flex justify-center rounded-full py-2 px-4 border border-transparent shadow-sm text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black">
-                  <Text variant="title3">Log in</Text>
+                  <Text variant="title3">Okay, let's go</Text>
                 </button>
               </div>
             </form>
