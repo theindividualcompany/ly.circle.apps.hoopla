@@ -54,12 +54,16 @@ body {
 }
 
 .header {
-  @apply max-w-5xl px-4 mx-auto relative min-h-16 flex justify-between;
+  @apply max-w-5xl px-4 mx-auto relative min-h-16;
+  @apply flex flex-col justify-center items-center;
+  @apply space-y-4;
 }
 
 @screen sm {
   .header {
     @apply px-8;
+    @apply flex-row justify-between;
+    @apply space-y-0;
   }
 }
 

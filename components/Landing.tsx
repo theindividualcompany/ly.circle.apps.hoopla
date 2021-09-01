@@ -14,8 +14,8 @@ export const Landing = () => {
             <div className="relative z-10 px-2 flex lg:px-0">
               <div className="flex-shrink-0 space-x-2 flex items-center">
                 <img
-                  className="block h-24 w-auto"
-                  src="/assets/iconset/512.png"
+                  className="block h-8 w-auto"
+                  src="/assets/iconset/64.png"
                   alt="Hoopla Logo"
                 />
                 <Text variant="headline" className="font-black ">
