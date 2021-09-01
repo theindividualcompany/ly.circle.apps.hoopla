@@ -2,7 +2,16 @@ import React from "react"
 import Head from "next/head"
 import { getCsrfToken, getSession } from "next-auth/client"
 import Text from "@components/Text"
+import { useRouter } from "next/router"
+
 export default function Login({ csrfToken }) {
+  const router = useRouter()
+  React.useEffect(() => {
+    if (!router.query?.callbackUrl) {
+      window.history.replaceState(null, null, "?callbackUrl=/")
+    }
+  }, [router.query])
+  
   return (
     <>
       <Head>
