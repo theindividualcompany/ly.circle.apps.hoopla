@@ -28,24 +28,28 @@ const calendars: Calendar[] = [
     title: "Google Calendar",
     description: "For personal and business calendars",
     imageSrc: "/assets/integrations/google-calendar.svg",
+    available: true,
   },
   {
     type: "office365_calendar",
     title: "Office 365 / Outlook.com Calendar",
     description: "For personal and business calendars",
     imageSrc: "/assets/integrations/outlook.svg",
+    available: false,
   },
   {
     type: "apple_calendar",
     title: "Apple Calendar",
     description: "For personal and business calendars",
     imageSrc: "/assets/integrations/apple.png",
+    available: false,
   },
   {
     type: "zoom_video",
     title: "Zoom",
     description: "For meetings and conferences",
     imageSrc: "/assets/integrations/zoom.svg",
+    available: false,
   },
 ]
 
@@ -78,6 +82,10 @@ export default function Page({ user, calendarConnections }: PageProps) {
     fetch("/api/integrations/" + type.replace("_", "") + "/add")
       .then((response) => response.json())
       .then((data) => (window.location.href = data.url))
+  }
+
+  function unimplementedHandler() {
+    alert("This integration is currently unavailable")
   }
 
   const Header = ({}) => {
@@ -363,7 +371,12 @@ export default function Page({ user, calendarConnections }: PageProps) {
                   className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
                   {calendars.map((calendar, itemIdx) => (
                     <li key={itemIdx}>
-                      <Pressable onPress={() => integrationHandler(calendar.type)}>
+                      <Pressable
+                        onPress={() =>
+                          calendar.available
+                            ? integrationHandler(calendar.type)
+                            : unimplementedHandler()
+                        }>
                         <CalendarListItem calendar={calendar} />
                       </Pressable>
                     </li>
