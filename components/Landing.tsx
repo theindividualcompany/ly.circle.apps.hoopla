@@ -78,7 +78,6 @@ export const Landing = () => {
                 Shout out to this guy <a href="https://mthomas.co.uk">Mike</a>, blogging just to
                 blog, for helping me figure this out.{" "}
               </Text>
-              <Text className="mb-4">Btw where would we be without the internet?</Text>
               <section className="mb-4">
                 <Text className="mb-1">
                   Anyhow, <s>for $12/year</s> free during beta Hoopla will send you a text anytime
