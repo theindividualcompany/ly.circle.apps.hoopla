@@ -295,7 +295,7 @@ export default function Page({ user, calendarConnections }: PageProps) {
       if (phoneNumber && phoneNumber !== user?.phone && isValidPhoneNumber(phoneNumber)) {
         setShouldUpdate(true)
       }
-
+      console.log("carrier", carrier)
       if (carrier && carrier.value !== user?.carrier) {
         setShouldUpdate(true)
       }
@@ -499,7 +499,16 @@ export default function Page({ user, calendarConnections }: PageProps) {
           <Text variant="headline">How To</Text>
           <ol className="mt-2 list-outside list-decimal space-y-2">
             <li>Open the Contacts app on the iPhone</li>
-            <li>Add Hoopla to Contacts</li>
+            <li>
+              Add Hoopla to Contacts
+              <div>
+                <strong>Name</strong> Hoopla
+              </div>
+              <div>
+                <strong>Email</strong> hoopla@hoopla.apps.circle.ly
+              </div>
+            </li>
+
             <li>
               Tap on the name of the contact whose text messages you want to receive when in DND
               mode
