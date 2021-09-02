@@ -18,11 +18,16 @@ import dayjs from "dayjs"
 import utc from "dayjs/plugin/utc"
 import timezone from "dayjs/plugin/timezone"
 import Router from "next/router"
+import { Fragment } from "react"
+import { Listbox, Transition } from "@headlessui/react"
+import { ChevronDownIcon } from "@heroicons/react/solid"
+import classnames from "classnames"
+import { find } from "lodash"
 
 dayjs.extend(utc)
 dayjs.extend(timezone)
 
-const calendars: Calendar[] = [
+const CALENDARS: Calendar[] = [
   {
     type: "google_calendar",
     title: "Google Calendar",
@@ -50,6 +55,30 @@ const calendars: Calendar[] = [
     description: "For meetings and conferences",
     imageSrc: "/assets/integrations/zoom.svg",
     available: false,
+  },
+]
+
+type Carrier = {
+  title: string
+  value: string
+}
+
+const CARRIERS: Carrier[] = [
+  {
+    title: "T Mobile",
+    value: "tmobile",
+  },
+  {
+    title: "At&t",
+    value: "att",
+  },
+  {
+    title: "Sprint",
+    value: "sprint",
+  },
+  {
+    title: "Verizon",
+    value: "verizon",
   },
 ]
 
@@ -202,7 +231,7 @@ export default function Page({ user, calendarConnections }: PageProps) {
   const Main = () => {
     const [shouldUpdate, setShouldUpdate] = React.useState(false)
     const [accountValid, setAccountValid] = React.useState(() => {
-      if (user.timezone && user.phone && isValidPhoneNumber(user.phone)) {
+      if (user.timezone && user.phone && isValidPhoneNumber(user.phone) && user.carrier) {
         return true
       }
 
@@ -219,6 +248,14 @@ export default function Page({ user, calendarConnections }: PageProps) {
     const [phoneNumber, setPhoneNumber] = React.useState(() => {
       if (user.phone) {
         return user.phone
+      }
+
+      return null
+    })
+
+    const [carrier, setCarrier] = React.useState<Carrier>(() => {
+      if (user.carrier) {
+        return find(CARRIERS, ["value", user.carrier])
       }
 
       return null
@@ -242,7 +279,11 @@ export default function Page({ user, calendarConnections }: PageProps) {
     }, [user])
 
     React.useEffect(() => {
-      if (user.phone === phoneNumber && user.timezone === timeZone.value) {
+      if (
+        user.phone === phoneNumber &&
+        user.timezone === timeZone?.value &&
+        user.carrier === carrier?.value
+      ) {
         setShouldUpdate(false)
         return
       }
@@ -255,10 +296,14 @@ export default function Page({ user, calendarConnections }: PageProps) {
         setShouldUpdate(true)
       }
 
+      if (carrier && carrier.value !== user?.carrier) {
+        setShouldUpdate(true)
+      }
+
       if (timeZone?.value && timeZone.value !== user?.timezone) {
         setShouldUpdate(true)
       }
-    }, [timeZone, phoneNumber])
+    }, [timeZone, phoneNumber, carrier])
 
     const updateUser = async (data) => {
       const body = JSON.stringify({
@@ -285,6 +330,7 @@ export default function Page({ user, calendarConnections }: PageProps) {
       const res = await updateUser({
         timezone: timeZone.value,
         phone: phoneNumber,
+        carrier: carrier.value,
       })
 
       if (res.ok) {
@@ -339,6 +385,44 @@ export default function Page({ user, calendarConnections }: PageProps) {
                 onChange={onChangePhoneNumber}
               />
             </div>
+            <Listbox
+              as="div"
+              className="w-full mt-3 relative inline-block text-left"
+              value={carrier}
+              onChange={setCarrier}>
+              <div>
+                <Listbox.Button className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+                  {carrier ? carrier.title : "Select Carrier"}
+                  <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
+                </Listbox.Button>
+              </div>
+              <Transition
+                as={Fragment}
+                enter="transition ease-out duration-100"
+                enterFrom="transform opacity-0 scale-95"
+                enterTo="transform opacity-100 scale-100"
+                leave="transition ease-in duration-75"
+                leaveFrom="transform opacity-100 scale-100"
+                leaveTo="transform opacity-0 scale-95">
+                <Listbox.Options className="origin-top-right z-10 absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  {CARRIERS.map((carrier) => (
+                    <div key={carrier.title} className="py-1">
+                      <Listbox.Option value={carrier} as={Fragment}>
+                        {({ active }) => (
+                          <li
+                            className={classnames(
+                              active ? "bg-gray-100 text-gray-900" : "text-gray-700",
+                              "block px-4 py-2 text-sm"
+                            )}>
+                            {carrier.title}
+                          </li>
+                        )}
+                      </Listbox.Option>
+                    </div>
+                  ))}
+                </Listbox.Options>
+              </Transition>
+            </Listbox>
           </section>
 
           <section className="">
@@ -369,7 +453,7 @@ export default function Page({ user, calendarConnections }: PageProps) {
                 <ul
                   role="list"
                   className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
-                  {calendars.map((calendar, itemIdx) => (
+                  {CALENDARS.map((calendar, itemIdx) => (
                     <li key={itemIdx}>
                       <Pressable
                         onPress={() =>
@@ -393,7 +477,7 @@ export default function Page({ user, calendarConnections }: PageProps) {
                     role="list"
                     className="mt-6 border-t border-b border-gray-200 divide-y divide-gray-200">
                     {calendarConnections.map((calendar, itemIdx) => {
-                      const c = calendars.find((c) => c.type === calendar.provider)
+                      const c = CALENDARS.find((c) => c.type === calendar.provider)
                       return (
                         <li key={itemIdx}>
                           <CalendarListItem calendar={{ connectionId: calendar.id, ...c }} />
@@ -457,6 +541,7 @@ export async function getServerSideProps(context) {
       email: true,
       timezone: true,
       phone: true,
+      carrier: true,
     },
   })
 
