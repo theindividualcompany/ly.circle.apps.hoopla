@@ -13,11 +13,7 @@ export const Landing = () => {
           <header className="header">
             <div className="relative z-10 px-2 flex lg:px-0">
               <div className="flex-shrink-0 space-x-2 flex items-center">
-                <img
-                  className="block h-8 w-auto"
-                  src="/assets/iconset/64.png"
-                  alt="Hoopla Logo"
-                />
+                <img className="block h-8 w-auto" src="/assets/iconset/64.png" alt="Hoopla Logo" />
                 <Text variant="headline" className="font-black ">
                   Hoopla
                 </Text>
@@ -80,8 +76,7 @@ export const Landing = () => {
               </Text>
               <section className="mb-4">
                 <Text className="mb-1">
-                  Anyhow, <s>for $12/year</s> free during beta Hoopla will send you a text anytime
-                  you have a meeting.
+                  Anyhow, Hoopla will send you a text anytime you have a meeting.
                 </Text>
                 <Text variant="caption">
                   If you have a Circlely Official Account Hoopla is free.
