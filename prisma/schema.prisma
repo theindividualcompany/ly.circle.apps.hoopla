@@ -23,6 +23,7 @@ model Account {
   firstLogin         DateTime?
   lastLogin          DateTime?
   timezone           String?
+  carrier            String?
   CalendarConnection CalendarConnection[]
 }
 
